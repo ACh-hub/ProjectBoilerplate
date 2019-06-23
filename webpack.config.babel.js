@@ -4,13 +4,29 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-module.exports = {
-	entry: './src/js/app.js',
-	mode: 'development',
-	output: {
-		path: path.resolve(__dirname, './dist'),
-		filename: "app.js"
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const I18nPlugin = require('i18n-webpack-plugin');
+
+// Will be moved to separate json file in the next iteration
+var languages = {
+	en: null,
+	pl: require("./languages/pl.json")
+};
+
+
+const config = Object.keys(languages).map(lang => ({
+	name: lang,
+	entry: {
+		app: __dirname + '/src/js/app.js'
 	},
+	mode: 'development',
+	
+	output: {
+		path: path.resolve(__dirname, './dist/' + lang),
+		path: __dirname + '/dist/' + lang,
+		publicPath: '/dist/' + lang,
+		filename: '[name]-[chunkhash].js'
+},
 	target: 'node',
 	module: {
 		rules: [
@@ -52,10 +68,17 @@ module.exports = {
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
-		new MiniCssExtractPlugin({
-		  filename: 'styles.css',
-		}),
-	  ]
-};
+		new HtmlWebPackPlugin({
+			template:  __dirname + '/src/index.html'
+	}),
+	new MiniCssExtractPlugin({
+		filename: '[name]-[contenthash].css',
+		chunkFilename: '[id].css'
+}),
+new I18nPlugin(languages[lang])
+		]
 
+}));
+
+module.exports = config;
 
