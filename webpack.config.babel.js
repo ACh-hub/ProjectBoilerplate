@@ -10,7 +10,7 @@ const I18nPlugin = require('i18n-webpack-plugin');
 // Will be moved to separate json file in the next iteration
 var languages = {
 	en: null,
-	pl: require("./pl.json")
+	pl: require("./languages/pl.json")
 };
 
 

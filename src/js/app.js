@@ -4,4 +4,3 @@ import 'regenerator-runtime/runtime'
 import '../sass/styles.scss'
 
 console.log(`${__('Hello World')}`)
-console.log('Missing Text')
