@@ -8,7 +8,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const I18nPlugin = require('i18n-webpack-plugin');
 
 // Will be moved to separate json file in the next iteration
-var languages = {
+const languages = {
 	en: null,
 	pl: require("./languages/pl.json")
 };
