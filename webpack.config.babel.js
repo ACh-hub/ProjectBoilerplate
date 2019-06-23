@@ -8,28 +8,25 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const I18nPlugin = require('i18n-webpack-plugin');
 
 // Will be moved to separate json file in the next iteration
-const locale = {
-	en: {
-			animals: {
-					hedgehog: 'hedgehog is a bunny',
-					walrus: 'walrus'
-			}
-	},
-	pl: {
-			animals: {
-					hedgehog: 'jeż',
-					walrus: 'mors'
-			}
-	}
-}
+var languages = {
+	en: null,
+	pl: require("./pl.json")
+};
 
-module.exports = {
-	entry: './src/js/app.js',
-	mode: 'development',
-	output: {
-		path: path.resolve(__dirname, './dist'),
-		filename: "app.js"
+
+const config = Object.keys(languages).map(lang => ({
+	name: lang,
+	entry: {
+		app: __dirname + '/src/js/app.js'
 	},
+	mode: 'development',
+	
+	output: {
+		path: path.resolve(__dirname, './dist/' + lang),
+		path: __dirname + '/dist/' + lang,
+		publicPath: '/dist/' + lang,
+		filename: '[name]-[chunkhash].js'
+},
 	target: 'node',
 	module: {
 		rules: [
@@ -72,14 +69,16 @@ module.exports = {
 	plugins: [
 		new CleanWebpackPlugin(),
 		new HtmlWebPackPlugin({
-			template: __dirname + '/src/index.html'
+			template:  __dirname + '/src/index.html'
 	}),
-		new MiniCssExtractPlugin({
-		  filename: 'styles.css',
-		}),
-		new I18nPlugin(locale, {
-			nested: true //allows for nesting locale keys
-		})
-	  ]
-};
+	new MiniCssExtractPlugin({
+		filename: '[name]-[contenthash].css',
+		chunkFilename: '[id].css'
+}),
+new I18nPlugin(languages[lang])
+		]
+
+}));
+
+module.exports = config;
 
