@@ -6,6 +6,7 @@ Babel
 ESlint
 Normalize
 Sass (modified 7-1 style)
+i18n with Webpack
 
 ## Installation
 
